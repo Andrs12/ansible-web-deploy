@@ -1,0 +1,10 @@
+---
+- name: Configure Web Servers
+  hosts: webservers
+  become: yes
+  
+  roles:
+    - common
+    - firewall
+    - webserver
+    - deploy_static_site

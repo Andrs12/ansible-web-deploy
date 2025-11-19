@@ -1,0 +1,14 @@
+---
+# webserver_type: apache
+webserver_type: nginx
+
+# Ports
+http_port: 80
+https_port: 443
+
+# System user
+web_user: webadmin
+web_group: webadmin
+  
+# Web root directory
+web_root: /var/www/html
