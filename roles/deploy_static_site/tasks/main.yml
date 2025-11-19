@@ -1,2 +1,29 @@
 ---
-# tasks file for deploy_static_site
+- name: Ensure document root directory exists
+  file:
+    path: "{{ site_document_root }}"
+    state: directory
+    owner: "{{ site_owner }}"
+    group: "{{ site_group }}"
+    mode: "{{ site_dir_mode }}"
+
+- name: Deploy site via copy method
+  include_tasks: deploy_copy.yml
+  when: deployment_method == 'copy'
+
+- name: Deploy site via git method
+  include_tasks: deploy_git.yml
+  when: deployment_method == 'git'
+
+- name: Set correct permissions on all files
+  file:
+    path: "{{ site_document_root }}"
+    owner: "{{ site_owner }}"
+    group: "{{ site_group }}"
+    mode: "{{ site_file_mode }}"
+    recurse: yes
+    state: directory
+
+- name: Set correct permissions on directories
+  command: "find {{ site_document_root }} -type d -exec chmod {{ site_dir_mode }} {} \\;"
+  changed_when: false

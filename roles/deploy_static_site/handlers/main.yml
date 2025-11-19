@@ -1,2 +1,7 @@
 ---
-# handlers file for deploy_static_site
+- name: reload webserver
+  service:
+    name: "{{ webserver_service_name }}"
+    state: reloaded
+  vars:
+    webserver_service_name: "{{ 'nginx' if webserver_type == 'nginx' else ('apache2' if ansible_os_family == 'Debian' else 'httpd') }}"

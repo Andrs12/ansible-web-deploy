@@ -1,0 +1,11 @@
+---
+- name: Copy static site files to server
+  copy:
+    src: "{{ item }}"
+    dest: "{{ site_document_root }}/"
+    owner: "{{ site_owner }}"
+    group: "{{ site_group }}"
+    mode: "{{ site_file_mode }}"
+  with_fileglob:
+    - "../files/*"
+  notify: reload webserver

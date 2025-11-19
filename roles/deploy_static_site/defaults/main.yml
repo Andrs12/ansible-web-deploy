@@ -1,2 +1,18 @@
 ---
-# defaults file for deploy_static_site
+# Directorio donde se despliega el sitio
+site_document_root: /var/www/html
+
+# Usuario y grupo del servidor web
+site_owner: www-data
+site_group: www-data
+
+# Permisos para archivos y directorios
+site_dir_mode: '0755'
+site_file_mode: '0644'
+
+# Método de despliegue: 'copy' o 'git'
+deployment_method: copy
+
+# Si usas Git (opcional)
+site_repository: ""
+site_repository_version: main

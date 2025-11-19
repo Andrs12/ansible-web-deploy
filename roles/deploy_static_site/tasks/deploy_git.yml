@@ -1,0 +1,13 @@
+---
+- name: Install git
+  package:
+    name: git
+    state: present
+
+- name: Clone/update site from git repository
+  git:
+    repo: "{{ site_repository }}"
+    dest: "{{ site_document_root }}"
+    version: "{{ site_repository_version }}"
+    force: yes
+  notify: reload webserver
