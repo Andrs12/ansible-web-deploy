@@ -1,0 +1,7 @@
+[webservers]
+debian-web-test ansible_connection=community.docker.docker
+ubuntu-web-test ansible_connection=community.docker.docker
+
+[webservers:vars]
+ansible_user=root
+ansible_python_interpreter=/usr/bin/python3

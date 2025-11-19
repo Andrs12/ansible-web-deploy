@@ -36,11 +36,16 @@
 - name: Create admin user
   user:
     name: "{{ admin_user }}"
-    groups: "{{ admin_groups }}"
+    groups: "{{ 'wheel' if ansible_os_family == 'RedHat' else 'sudo' }}"
     append: yes
     create_home: yes
     shell: /bin/bash
     state: present
+
+- name: Check if SSH config exists
+  stat:
+    path: /etc/ssh/sshd_config
+  register: sshd_config
 
 - name: Configure SSH - Disable root login
   lineinfile:
@@ -48,5 +53,7 @@
     regexp: '^PermitRootLogin'
     line: 'PermitRootLogin no'
     state: present
-  when: disable_root_login | bool
+  when:
+    - disable_root_login | bool
+    - sshd_config.stat.exists
   notify: restart sshd

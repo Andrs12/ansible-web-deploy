@@ -1,7 +1,9 @@
 ---
 - name: reload webserver
-  service:
-    name: "{{ webserver_service_name }}"
-    state: reloaded
-  vars:
-    webserver_service_name: "{{ 'nginx' if webserver_type == 'nginx' else ('apache2' if ansible_os_family == 'Debian' else 'httpd') }}"
+  shell: |
+    if [ "{{ webserver_type }}" = "nginx" ]; then
+      nginx -s reload || service nginx reload || /etc/init.d/nginx reload
+    else
+      service {{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }} reload
+    fi
+  ignore_errors: yes

@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  debian-test:
+    image: python:3.11-slim-bullseye
+    container_name: debian-web-test
+    hostname: debian-web
+    privileged: true
+    ports:
+      - "8080:80"
+    networks:
+      ansible_test:
+        ipv4_address: 172.28.0.10
+    command: >
+      bash -c "
+      apt-get update -qq &&
+      apt-get install -y -qq sudo python3 procps curl &&
+      
+      tail -f /dev/null
+      "
+
+  ubuntu-test:
+    image: ubuntu:22.04
+    container_name: ubuntu-web-test
+    hostname: ubuntu-web
+    privileged: true
+    ports:
+      - "8081:80"
+    networks:
+      ansible_test:
+        ipv4_address: 172.28.0.12
+    command: >
+      bash -c "
+      apt-get update -qq &&
+      apt-get install -y -qq sudo python3 procps curl &&
+      tail -f /dev/null
+      "
+
+networks:
+  ansible_test:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

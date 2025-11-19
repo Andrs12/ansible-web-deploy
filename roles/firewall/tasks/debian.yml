@@ -5,11 +5,16 @@
     state: present
     update_cache: yes
 
-- name: Allow configured services
+- name: Allow configured services via ports
   community.general.ufw:
     rule: allow
-    name: "{{ item }}"
-  loop: "{{ firewall_allowed_services }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto | default('tcp') }}"
+  loop:
+    - { name: 'ssh', port: '22', proto: 'tcp' }
+    - { name: 'http', port: '80', proto: 'tcp' }
+    - { name: 'https', port: '443', proto: 'tcp' }
+  when: item.name in firewall_allowed_services
 
 - name: Allow configured custom ports
   community.general.ufw:
