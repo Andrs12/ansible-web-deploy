@@ -1,0 +1,47 @@
+---
+- name: Install Nginx (Debian/Ubuntu)
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: Install Nginx (RedHat/CentOS)
+  yum:
+    name: nginx
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Create document root directory
+  file:
+    path: "{{ webserver_document_root }}"
+    state: directory
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_group }}"
+    mode: '0755'
+
+- name: Deploy Nginx configuration
+  template:
+    src: nginx_default.conf.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_os_family == "Debian"
+  notify: restart nginx
+
+- name: Deploy Nginx configuration (RedHat)
+  template:
+    src: nginx_default.conf.j2
+    dest: /etc/nginx/conf.d/default.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: ansible_os_family == "RedHat"
+  notify: restart nginx
+
+- name: Ensure Nginx is started and enabled
+  service:
+    name: nginx
+    state: started
+    enabled: yes

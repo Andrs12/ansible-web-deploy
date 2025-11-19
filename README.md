@@ -3,20 +3,21 @@ Ansible playbook for automated web server provisioning. Handles Apache/Nginx ins
 
 
 ## Structure
-
+```
 ansible-webserver-config/
 ├── ansible.cfg
 ├── inventory/
-│   ├── hosts
-│   └── group_vars/
-│       └── webservers.yml
+│   ├── hosts
+│   └── group_vars/
+│       └── webservers.yml
 ├── playbooks/
-│   └── site.yml
+│   └── site.yml
 ├── roles/
-│   ├── common/
-│   ├── webserver/
-│   ├── firewall/
-│   └── deploy_static_site/
+│   ├── common/
+│   ├── webserver/
+│   ├── firewall/
+│   └── deploy_static_site/
 └── README.md
+```
 
 

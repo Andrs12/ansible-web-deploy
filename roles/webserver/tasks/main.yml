@@ -1,2 +1,3 @@
 ---
-# tasks file for webserver
+- name: Include webserver-specific tasks
+  include_tasks: "{{ webserver_type }}.yml"

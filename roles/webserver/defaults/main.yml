@@ -1,2 +1,12 @@
 ---
-# defaults file for webserver
+# Server type: nginx or apache
+webserver_type: nginx
+
+# Basic configuration
+webserver_port: 80
+webserver_document_root: /var/www/html
+webserver_server_name: localhost
+
+# Web server user/group
+webserver_user: www-data
+webserver_group: www-data
