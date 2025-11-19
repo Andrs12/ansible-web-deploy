@@ -1,2 +1,16 @@
 ---
-# defaults file for firewall
+# Services to allow (for firewalld - RedHat/CentOS)
+firewall_allowed_services:
+  - ssh
+  - http
+  - https
+
+# Custom ports to allow (if you need non-standard ports)
+firewall_allowed_ports: []
+  # Example:
+  # - port: 8080
+  #   proto: tcp
+  #   comment: "Custom app"
+
+# Default policy
+firewall_default_policy: deny

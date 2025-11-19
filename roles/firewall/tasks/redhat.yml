@@ -1,0 +1,35 @@
+---
+- name: Install firewalld
+  yum:
+    name: firewalld
+    state: present
+
+- name: Start and enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Allow configured services
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  loop: "{{ firewall_allowed_services }}"
+
+- name: Allow configured custom ports
+  ansible.posix.firewalld:
+    port: "{{ item.port }}/{{ item.proto }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  loop: "{{ firewall_allowed_ports }}"
+  when: firewall_allowed_ports | length > 0
+
+- name: Set default zone to drop
+  ansible.posix.firewalld:
+    zone: drop
+    state: enabled
+    permanent: yes
+  when: firewall_default_policy == "deny"
