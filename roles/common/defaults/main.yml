@@ -1,2 +1,9 @@
 ---
-# defaults file for common
+common_packages:
+  - curl
+  - wget
+
+admin_user: webadmin
+admin_groups: "sudo"
+
+disable_root_login: true

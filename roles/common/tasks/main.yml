@@ -1,2 +1,52 @@
 ---
-# tasks file for common
+- name: Update apt cache (Debian/Ubuntu)
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+
+- name: Update yum cache (RedHat/CentOS)
+  yum:
+    update_cache: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Upgrade all packages (Debian/Ubuntu)
+  apt:
+    upgrade: dist
+  when: ansible_os_family == "Debian"
+
+- name: Upgrade all packages (RedHat/CentOS)
+  yum:
+    name: '*'
+    state: latest
+  when: ansible_os_family == "RedHat"
+
+- name: Install common packages (Debian/Ubuntu)
+  apt:
+    name: "{{ common_packages }}"
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install common packages (RedHat/CentOS)
+  yum:
+    name: "{{ common_packages }}"
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Create admin user
+  user:
+    name: "{{ admin_user }}"
+    groups: "{{ admin_groups }}"
+    append: yes
+    create_home: yes
+    shell: /bin/bash
+    state: present
+
+- name: Configure SSH - Disable root login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: 'PermitRootLogin no'
+    state: present
+  when: disable_root_login | bool
+  notify: restart sshd
